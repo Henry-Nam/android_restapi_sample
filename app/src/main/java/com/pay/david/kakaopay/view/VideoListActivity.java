@@ -121,10 +121,7 @@ public class VideoListActivity extends AppCompatActivity implements RepositoryLi
     @Override
     public void showDetailFragment(SearchData data) {
         Bundle bundle = new Bundle(1);
-        bundle.putString(TITLE, data.snippet.title); 
-        bundle.putString(URL, data.snippet.thumbnails.highs.url); 
-        bundle.putString(CONTENT, data.snippet.description); 
-        bundle.putString(VIDEO_ID, data.id.videoId); 
+        bundle.putParcelable("data", data);
         detailFragment = DetailFragment.newInstance();
         detailFragment.setArguments(bundle);
         replaceFragment(detailFragment);

@@ -1,6 +1,5 @@
 package com.pay.david.kakaopay.view;
 
-import android.content.Context;
 import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
@@ -18,15 +17,11 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.pay.david.R;
 import com.pay.david.databinding.LayoutSubItemBinding;
 import com.pay.david.kakaopay.contract.DetailSubItemViewContract;
-import com.pay.david.kakaopay.contract.DetailViewContract;
 import com.pay.david.kakaopay.dao.ListSearchData;
 import com.pay.david.kakaopay.dao.SearchData;
 import com.pay.david.kakaopay.model.ApiManager;
 import com.pay.david.kakaopay.model.ApiService;
 import com.pay.david.kakaopay.viewmodel.DetailSubItemViewModel;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SubItemListAdapter extends RecyclerView.Adapter<SubItemListAdapter.RepoViewHolder> {
     public static final String LOG = SubItemListAdapter.class.getSimpleName();
@@ -35,20 +30,6 @@ public class SubItemListAdapter extends RecyclerView.Adapter<SubItemListAdapter.
     private DetailSubItemViewModel viewModel;
     private ListSearchData items;
     LayoutSubItemBinding binding;
-    private boolean isStarted = false;
-
-    public void mockData() {
-        SearchData.Default defaults = new SearchData.Default("https://i.ytimg.com/vi/F9CrRG6j2SM/default.jpg");
-        SearchData.High highs = new SearchData.High("https://i.ytimg.com/vi/F9CrRG6j2SM/default.jpg");
-        SearchData.Thumbnail thumbnails = new SearchData.Thumbnail(defaults, highs);
-        SearchData.Snippet snippet = new SearchData.Snippet("111", "111", "test", thumbnails, "test");
-        SearchData.VideoIds videoIds = new SearchData.VideoIds("F9CrRG6j2SM");
-        SearchData d = new SearchData(snippet, videoIds);
-        List<SearchData> items = new ArrayList<>();
-        items.add(d);
-        ListSearchData data = new ListSearchData(items);
-        this.items = data;
-    }
 
     public SubItemListAdapter(DetailSubItemViewContract view) {
         this.view = view;
@@ -80,18 +61,13 @@ public class SubItemListAdapter extends RecyclerView.Adapter<SubItemListAdapter.
     public void onBindViewHolder(final RepoViewHolder holder, final int position) {
         Log.d(LOG, "onBindViewHolder");
         final SearchData item = getItemAt(position);
-        if(isStarted) {
-            holder.loadItem(item);
-        } else {
-            isStarted = true;
-        }
+        holder.loadItem(item);
     }
 
     @Override
     public int getItemCount() {
         if (items == null) {
-            Log.d(LOG, "mockData()");
-            mockData();
+            return 0;
         }
         return items.items.size();
     }
@@ -107,7 +83,6 @@ public class SubItemListAdapter extends RecyclerView.Adapter<SubItemListAdapter.
         public void loadItem(SearchData item) {
             Log.d(LOG, "loadItem");
             viewModel.loadItem(item);
-
         }
     }
 

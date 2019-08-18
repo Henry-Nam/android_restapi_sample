@@ -24,11 +24,6 @@ import com.pay.david.kakaopay.model.ApiManager;
 import com.pay.david.kakaopay.model.ApiService;
 import com.pay.david.kakaopay.viewmodel.DetailViewModel;
 
-import static com.pay.david.kakaopay.util.Constants.CONTENT;
-import static com.pay.david.kakaopay.util.Constants.TITLE;
-import static com.pay.david.kakaopay.util.Constants.URL;
-import static com.pay.david.kakaopay.util.Constants.VIDEO_ID;
-
 public class DetailFragment extends Fragment implements DetailViewContract, DetailSubItemViewContract {
     public static final String LOG = DetailFragment.class.getSimpleName();
 
@@ -64,14 +59,12 @@ public class DetailFragment extends Fragment implements DetailViewContract, Deta
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Log.d(LOG, "onViewCreated");
         getActivity().findViewById(R.id.recycler_repos).setVisibility(View.GONE);
-        String videoId = getArguments().getString(VIDEO_ID);
-        String title = getArguments().getString(TITLE);
-        String url = getArguments().getString(URL);
-        String content = getArguments().getString(CONTENT);
-        detailViewModel.loadItem(title, url, content);
+        SearchData data = getArguments().getParcelable("data");
         subItemListAdapter = new SubItemListAdapter(this);
         binding.subList.setAdapter(subItemListAdapter);
         binding.subList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayout.HORIZONTAL, false));
+
+        detailViewModel.loadItem(data);
     }
 
     @Override
@@ -90,10 +83,7 @@ public class DetailFragment extends Fragment implements DetailViewContract, Deta
     public void reload(SearchData data) {
         if(data != null) {
             Bundle bundle = new Bundle(1);
-            bundle.putString(TITLE, data.snippet.title);
-            bundle.putString(URL, data.snippet.thumbnails.highs.url);
-            bundle.putString(CONTENT, data.snippet.description);
-            bundle.putString(VIDEO_ID, data.id.videoId);
+            bundle.putParcelable("data", data);
             this.setArguments(bundle);
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             ft.detach(this).attach(this).commit();

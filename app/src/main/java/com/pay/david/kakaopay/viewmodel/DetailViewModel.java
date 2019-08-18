@@ -8,6 +8,7 @@ import android.view.View;
 import com.pay.david.kakaopay.contract.DetailSubItemViewContract;
 import com.pay.david.kakaopay.contract.DetailViewContract;
 import com.pay.david.kakaopay.dao.ListSearchData;
+import com.pay.david.kakaopay.dao.SearchData;
 import com.pay.david.kakaopay.model.ApiService;
 
 import rx.Observable;
@@ -35,18 +36,13 @@ public class DetailViewModel {
 
     }
 
-    public void loadItem(final String title, String url, String content) {
+    public void loadItem(final SearchData data) {
         progressBarVisibility.set(View.GONE);
-        this.url.set(url);
-        this.title.set(title);
-        this.contents.set(content);
+        this.url.set(data.snippet.thumbnails.defaults.url);
+        this.title.set(data.snippet.title);
+        this.contents.set(data.snippet.description);
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                getChannelInfo(title);
-            }
-        }).start();
+        getChannelInfo(this.title.get());
     }
 
     public void getChannelInfo(String title) {

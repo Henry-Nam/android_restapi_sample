@@ -1,10 +1,11 @@
 package com.pay.david.kakaopay.dao;
 
-import com.google.gson.annotations.SerializedName;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class SearchData {
-    public final VideoIds id;
-    public final Snippet snippet;
+public class SearchData implements Parcelable {
+    public VideoIds id;
+    public Snippet snippet;
 
     public SearchData(Snippet snippet, VideoIds id) {
         super();
@@ -12,56 +13,31 @@ public class SearchData {
         this.id = id;
     }
 
-    public static class VideoIds {
-        public final String videoId;
-
-        public VideoIds(String videoId) {
-            this.videoId = videoId;
-        }
+    protected SearchData(Parcel in) {
+        id = in.readParcelable(VideoIds.class.getClassLoader());
+        snippet = in.readParcelable(Snippet.class.getClassLoader());
     }
 
-    public static class Snippet {
-        public final String channelId;
-        public final String title;
-        public final String description;
-        public final Thumbnail thumbnails;
-        public final String publishedAt;
-
-        public Snippet(String channelId, String title, String description, Thumbnail thumbnails, String publishedAt) {
-            super();
-            this.channelId = channelId;
-            this.title = title;
-            this.description = description;
-            this.thumbnails = thumbnails;
-            this.publishedAt = publishedAt;
+    public static final Creator<SearchData> CREATOR = new Creator<SearchData>() {
+        @Override
+        public SearchData createFromParcel(Parcel in) {
+            return new SearchData(in);
         }
+
+        @Override
+        public SearchData[] newArray(int size) {
+            return new SearchData[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public static class Thumbnail {
-        @SerializedName("default")
-        public final Default defaults;
-        @SerializedName("high")
-        public final High highs;
-
-        public Thumbnail(Default defaults, High highs) {
-            this.defaults = defaults;
-            this.highs = highs;
-        }
-    }
-
-    public static class Default {
-        public final String url;
-
-        public Default(String url) {
-            this.url = url;
-        }
-    }
-
-    public static class High {
-        public final String url;
-
-        public High(String url) {
-            this.url = url;
-        }
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeParcelable(id, i);
+        parcel.writeParcelable(snippet, i);
     }
 }

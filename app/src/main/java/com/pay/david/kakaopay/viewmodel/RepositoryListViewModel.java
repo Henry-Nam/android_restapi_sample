@@ -5,11 +5,7 @@ import android.view.View;
 
 import com.pay.david.kakaopay.contract.RepositoryListViewContract;
 import com.pay.david.kakaopay.dao.ListSearchData;
-import com.pay.david.kakaopay.dao.SearchData;
 import com.pay.david.kakaopay.model.ApiService;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -60,24 +56,12 @@ public class RepositoryListViewModel {
                             @Override
                             public void onError(Throwable e) {
                                 repositoryListView.showError(e.getMessage());
-                                repositoryListView.showRepositories(makeMockData());
+//                                if(NetworkUtil.getInstance(get))
                                 progressBarVisibility.set(View.GONE);
                             }
 
                         });
     }
 
-    public ListSearchData makeMockData() {
-        SearchData.Default defaults = new SearchData.Default("https://i.ytimg.com/vi/F9CrRG6j2SM/default.jpg");
-        SearchData.High highs = new SearchData.High("https://i.ytimg.com/vi/F9CrRG6j2SM/default.jpg");
-        SearchData.Thumbnail thumbnails = new SearchData.Thumbnail(defaults, highs);
-        SearchData.Snippet snippet = new SearchData.Snippet("111", "111", "test", thumbnails, "test");
-        SearchData.VideoIds videoIds = new SearchData.VideoIds("F9CrRG6j2SM");
-        SearchData d = new SearchData(snippet, videoIds);
-        List<SearchData> items = new ArrayList<>();
-        items.add(d);
-        ListSearchData data = new ListSearchData(items);
-        return data;
-    }
 }
 
